@@ -15,6 +15,6 @@ data class UnsplashImage(
     @Embedded
     @SerializedName("urls") val urls: Urls,
     @Embedded
-    @SerializedName("links") val links: Links,
+    @SerializedName("user") val user: User,
     @SerializedName("likes") val likes: Int,
 )

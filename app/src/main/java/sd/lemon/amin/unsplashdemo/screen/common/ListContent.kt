@@ -2,6 +2,7 @@ package sd.lemon.amin.unsplashdemo.screen.common
 
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -33,10 +34,12 @@ import sd.lemon.amin.unsplashdemo.R
 import sd.lemon.amin.unsplashdemo.model.Links
 import sd.lemon.amin.unsplashdemo.model.UnsplashImage
 import sd.lemon.amin.unsplashdemo.model.Urls
+import sd.lemon.amin.unsplashdemo.model.User
 
 @ExperimentalCoilApi
 @Composable
 fun ListContent(items: LazyPagingItems<UnsplashImage>) {
+    Log.d("Error", items.loadState.toString())
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(all = 12.dp),
@@ -62,6 +65,7 @@ fun UnsplashItem(unsplashImage: UnsplashImage) {
             .crossfade(1000)
             .error(R.drawable.ic_placeholder)
             .placeholder(R.drawable.ic_placeholder)
+            .build()
     )
     val context = LocalContext.current
     Box(
@@ -69,7 +73,7 @@ fun UnsplashItem(unsplashImage: UnsplashImage) {
             .clickable {
                 val browserIntent = Intent(
                     Intent.ACTION_VIEW,
-                    Uri.parse("https://unsplash.com/@${unsplashImage.links.html}?utm_source=UnsplashDemo&utm_medium=referral")
+                    Uri.parse("https://unsplash.com/@${unsplashImage.user.username}?utm_source=UnsplashDemo&utm_medium=referral")
                 )
                 startActivity(context, browserIntent, null)
             }
@@ -102,7 +106,7 @@ fun UnsplashItem(unsplashImage: UnsplashImage) {
                 text = buildAnnotatedString {
                     append("Photo by ")
                     withStyle(style = SpanStyle(fontWeight = FontWeight.Black)) {
-                        append(unsplashImage.links.html)
+                        append(unsplashImage.user.username)
                     }
                     append(" on Unsplash")
                 },
@@ -152,5 +156,5 @@ fun LikeCounter(
 @Composable
 @Preview
 fun UnsplashImagePreview() {
-    UnsplashItem(UnsplashImage(id = "1", urls = Urls(""), likes = 5, links = Links("")))
+    UnsplashItem(UnsplashImage(id = "1", urls = Urls(""), likes = 5, user = User(Links(""), "")))
 }

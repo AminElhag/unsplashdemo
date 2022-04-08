@@ -10,10 +10,9 @@ import sd.lemon.amin.unsplashdemo.data.remote.UnsplashAPI
 import sd.lemon.amin.unsplashdemo.model.UnsplashImage
 import sd.lemon.amin.unsplashdemo.model.UnsplashRemoteKeys
 import sd.lemon.amin.unsplashdemo.util.Constants.ITEMS_PER_PAGE
-import javax.inject.Inject
 
 @ExperimentalPagingApi
-class UnsplashRemoteMediator @Inject constructor(
+class UnsplashRemoteMediator(
     private val unsplashAPI: UnsplashAPI,
     private val unsplashDataBase: UnsplashDataBase
 ) : RemoteMediator<Int, UnsplashImage>() {
@@ -75,21 +74,21 @@ class UnsplashRemoteMediator @Inject constructor(
         }
     }
 
-    private fun getRemoteKeyForLastItem(state: PagingState<Int, UnsplashImage>): UnsplashRemoteKeys? {
+    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, UnsplashImage>): UnsplashRemoteKeys? {
         return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()
             ?.let { unsplashImage ->
                 unsplashRemoteKeysDao.getUnsplashRemoteKeyImage(id = unsplashImage.id)
             }
     }
 
-    private fun getRemoteKeyForFirstItem(state: PagingState<Int, UnsplashImage>): UnsplashRemoteKeys? {
+    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, UnsplashImage>): UnsplashRemoteKeys? {
         return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()
             ?.let { unsplashImage ->
                 unsplashRemoteKeysDao.getUnsplashRemoteKeyImage(id = unsplashImage.id)
             }
     }
 
-    private fun getRemoteClosesToCurrentPosition(state: PagingState<Int, UnsplashImage>): UnsplashRemoteKeys? {
+    private suspend fun getRemoteClosesToCurrentPosition(state: PagingState<Int, UnsplashImage>): UnsplashRemoteKeys? {
         return state.anchorPosition?.let { position ->
             state.closestItemToPosition(position)?.id?.let { id ->
                 unsplashRemoteKeysDao.getUnsplashRemoteKeyImage(id = id)

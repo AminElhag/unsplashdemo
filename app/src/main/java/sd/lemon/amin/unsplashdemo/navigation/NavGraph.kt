@@ -7,8 +7,9 @@ import androidx.navigation.compose.composable
 import androidx.paging.ExperimentalPagingApi
 import coil.annotation.ExperimentalCoilApi
 import sd.lemon.amin.unsplashdemo.screen.home.HomeScreen
+import sd.lemon.amin.unsplashdemo.screen.search.SearchScreen
 
-@OptIn(ExperimentalCoilApi::class)
+@ExperimentalCoilApi
 @ExperimentalPagingApi
 @Composable
 fun SetupNavGraph(navController: NavHostController) {
@@ -20,7 +21,7 @@ fun SetupNavGraph(navController: NavHostController) {
             HomeScreen(navController = navController)
         }
         composable(route = Screen.Search.route){
-//            SearchScreen(navController = navController)
+            SearchScreen(navController = navController)
         }
     }
 }
